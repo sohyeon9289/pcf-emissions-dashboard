@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --muted: 210 16% 93%;
+    --muted-foreground: 215 16% 47%;
+
+    --border: 214 20% 89%;
+    --input: 214 20% 89%;
+    --ring: 158 64% 40%;
+
+    --primary: 158 64% 40%;
+    --primary-foreground: 0 0% 100%;
+
+    --accent: 200 80% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --scope-1: 14 90% 53%;   /* Scope 1: 직접 배출 - 주황 */
+    --scope-2: 200 80% 50%;  /* Scope 2: 간접(전력) - 청록 */
+    --scope-3: 262 70% 60%;  /* Scope 3: 가치사슬 - 보라 */
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 47% 8%;
+    --foreground: 210 20% 96%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 210 20% 96%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 16% 65%;
+
+    --border: 217 33% 22%;
+    --input: 217 33% 22%;
+    --ring: 158 64% 50%;
+
+    --primary: 158 64% 50%;
+    --primary-foreground: 222 47% 11%;
+
+    --accent: 200 80% 60%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 65%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 71% 50%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 55%;
+    --warning-foreground: 222 47% 11%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+}

@@ -1,0 +1,51 @@
+# dependencies
+node_modules
+.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# build outputs
+.next
+out
+dist
+build
+*.tsbuildinfo
+next-env.d.ts
+
+# environment
+.env
+.env*.local
+.env.production
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# test/coverage
+coverage
+.nyc_output
+
+# Prisma
+prisma/migrations/dev.db*
+
+# misc
+*.pem
+.cursor/
+agent-tools/
+terminals/
+
+# 과제 원본 자료 (참고용)
+/[HanaLoop]*.pdf
+/2026*_*.pdf
+/2026*_*.xlsx
+/data.xlsx

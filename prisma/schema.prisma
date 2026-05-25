@@ -1,0 +1,127 @@
+// Prisma schema for PCF Emissions Dashboard
+// 도메인: Country / Company / ActivityType / Activity / EmissionFactor / FactorVersion / Post
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// 국가 (영문 과제 데이터 모델)
+model Country {
+  code      String    @id @db.VarChar(2)
+  name      String
+  companies Company[]
+
+  @@map("countries")
+}
+
+/// 회사. 영문 과제의 Company 모델 + 한글 과제의 고객사 시나리오를 모두 수용.
+model Company {
+  id          String     @id @default(cuid())
+  name        String
+  countryCode String     @db.VarChar(2)
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  country     Country    @relation(fields: [countryCode], references: [code])
+  activities  Activity[]
+  posts       Post[]
+
+  @@index([countryCode])
+  @@map("companies")
+}
+
+/// 활동 유형 (전기/원소재/운송/...). GHG Scope 매핑 포함.
+/// scope: SCOPE_1 / SCOPE_2 / SCOPE_3
+model ActivityType {
+  key          String           @id // e.g. "electricity", "material_plastic1"
+  label        String // 화면 표기용 한국어 라벨
+  scope        GhgScope
+  category     String? // scope3 하위 카테고리 등
+  defaultUnit  String // 기본 입력 단위 (kWh, kg, ton-km, ...)
+  description  String?
+  activities   Activity[]
+  factors      EmissionFactor[]
+
+  @@map("activity_types")
+}
+
+/// 활동(=배출원) 데이터. 한글 과제 핵심.
+model Activity {
+  id          String       @id @default(cuid())
+  companyId   String
+  typeKey     String
+  date        DateTime     @db.Date
+  description String? // 예: "한국전력", "플라스틱 1", "트럭"
+  amount      Float
+  unit        String // kWh / kg / ton-km / ...
+  source      String? // 자유 메모 (운영 출처)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  company Company      @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  type    ActivityType @relation(fields: [typeKey], references: [key])
+
+  @@index([companyId, date])
+  @@index([typeKey, date])
+  @@map("activities")
+}
+
+/// 배출계수 (논리 단위). 실제 값은 FactorVersion 에서 시점 별로 관리.
+model EmissionFactor {
+  id          String          @id @default(cuid())
+  typeKey     String          @unique
+  description String
+  unit        String // 출력 단위 (예: "kgCO2e/kWh")
+  numerator   String // "kgCO2e"
+  denominator String // "kWh" / "kg" / "ton-km"
+  source      String? // IPCC, K-eco 등 출처
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  type        ActivityType    @relation(fields: [typeKey], references: [key])
+  versions    FactorVersion[]
+
+  @@map("emission_factors")
+}
+
+/// 배출계수 버전 이력. validFrom/validTo 기준으로 활동 일자에 적용될 버전 결정.
+model FactorVersion {
+  id        String         @id @default(cuid())
+  factorId  String
+  version   Int
+  value     Float
+  validFrom DateTime       @db.Date
+  validTo   DateTime?      @db.Date
+  note      String?
+  createdAt DateTime       @default(now())
+  factor    EmissionFactor @relation(fields: [factorId], references: [id], onDelete: Cascade)
+
+  @@unique([factorId, version])
+  @@index([factorId, validFrom])
+  @@map("factor_versions")
+}
+
+/// 게시물 (영문 과제 Post). 회사 + 월(yearMonth)에 태깅.
+model Post {
+  id           String   @id @default(cuid())
+  title        String
+  resourceUid  String // Company.id
+  dateTime     String // "2025-03"
+  content      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  company      Company  @relation(fields: [resourceUid], references: [id], onDelete: Cascade)
+
+  @@index([resourceUid, dateTime])
+  @@map("posts")
+}
+
+enum GhgScope {
+  SCOPE_1
+  SCOPE_2
+  SCOPE_3
+}

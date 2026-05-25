@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pcf-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pcf
+      POSTGRES_PASSWORD: pcf
+      POSTGRES_DB: pcf
+    ports:
+      - "5432:5432"
+    volumes:
+      - pcf-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pcf -d pcf"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  web:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pcf-web
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://pcf:pcf@postgres:5432/pcf?schema=public
+      NEXT_PUBLIC_SIMULATE_LATENCY: "1"
+      NEXT_PUBLIC_SIMULATE_FAILURE_RATE: "0.15"
+    ports:
+      - "3000:3000"
+    command: sh -c "npx prisma migrate deploy && npx tsx prisma/seed.ts && yarn start"
+
+volumes:
+  pcf-db-data:
