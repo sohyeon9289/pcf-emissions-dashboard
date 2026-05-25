@@ -1,13 +1,24 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { Activity, Building2, Flame, Leaf } from 'lucide-react';
 import { FilterBar } from '@/components/filters/FilterBar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { KpiCard } from '@/components/charts/KpiCard';
-import { MonthlyTrend } from '@/components/charts/MonthlyTrend';
-import { ScopeDonut } from '@/components/charts/ScopeDonut';
-import { TypeBar } from '@/components/charts/TypeBar';
 import { CompanyRanking } from '@/components/charts/CompanyRanking';
+
+const MonthlyTrend = dynamic(
+  () => import('@/components/charts/MonthlyTrend').then((m) => m.MonthlyTrend),
+  { ssr: false, loading: () => <div className="h-[280px] animate-pulse rounded-md bg-muted" /> },
+);
+const ScopeDonut = dynamic(
+  () => import('@/components/charts/ScopeDonut').then((m) => m.ScopeDonut),
+  { ssr: false, loading: () => <div className="h-[220px] animate-pulse rounded-md bg-muted" /> },
+);
+const TypeBar = dynamic(
+  () => import('@/components/charts/TypeBar').then((m) => m.TypeBar),
+  { ssr: false, loading: () => <div className="h-[280px] animate-pulse rounded-md bg-muted" /> },
+);
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState, ErrorState } from '@/components/ui/States';
 import { useFilterUrl } from '@/features/filters/useFilterUrl';
