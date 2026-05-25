@@ -44,8 +44,8 @@ prisma/migrations/dev.db*
 agent-tools/
 terminals/
 
-# 과제 원본 자료 (참고용)
-/[HanaLoop]*.pdf
-/2026*_*.pdf
-/2026*_*.xlsx
-/data.xlsx
+# 과제 원본 자료 (참고용, git에는 올리지 않음)
+/*.pdf
+/*.xlsx
+!/docs/**/*.pdf
+!/docs/**/*.xlsx
