@@ -32,8 +32,7 @@ export default function PostsPage() {
         <div>
           <h1 className="text-xl font-bold tracking-tight sm:text-2xl">게시물</h1>
           <p className="text-sm text-muted-foreground">
-            회사 + 월(YYYY-MM)에 태깅하는 운영 메모/리포트. 저장 시 약 15% 확률로 실패(시뮬레이션) →
-            재시도 UX 시연.
+            회사 + 월(YYYY-MM)에 태깅하는 운영 메모/리포트.
           </p>
         </div>
         <Button onClick={() => setEditing('new')}>
