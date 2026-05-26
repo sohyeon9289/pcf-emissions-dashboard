@@ -8,8 +8,6 @@ import {
   ListChecks,
   Sliders,
   FileSpreadsheet,
-  FileText,
-  BookOpenText,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -26,8 +24,6 @@ const ITEMS: NavItem[] = [
   { href: '/activities', label: '활동 데이터', description: '입력·수정·삭제', icon: ListChecks },
   { href: '/factors', label: '배출계수', description: '버전 이력 관리', icon: Sliders },
   { href: '/imports', label: 'Excel 임포트', description: '원본 그대로 업로드', icon: FileSpreadsheet },
-  { href: '/posts', label: '게시물', description: '월별 메모/리포트', icon: FileText },
-  { href: '/docs', label: 'API 문서', description: 'OpenAPI/Swagger', icon: BookOpenText },
 ];
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
@@ -91,9 +87,6 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
           );
         })}
       </ul>
-      <div className="rounded-md border border-dashed border-border p-2 text-[11px] text-muted-foreground">
-        Fake API: 200~800ms latency · ~15% write 실패 시뮬레이션
-      </div>
     </nav>
   );
 }
