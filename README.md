@@ -2,9 +2,8 @@
 
 탄소 활동 데이터(전기·원소재·운송 등)에 **배출계수(버전 관리)** 를 적용하여 **PCF(Product Carbon Footprint)** 를 자동 계산·시각화하는 인터랙티브 대시보드입니다.
 
-> 본 저장소는 두 채용과제(HanaLoop 영문 Carbon Emissions Dashboard 202509, 2026 한글 탄소관리 플랫폼)를 통합 구현한 풀스택 Next.js 14 애플리케이션입니다. 두 평가 기준 모두를 만점 기준으로 충족하는 것을 목표로 했습니다.
 
-## 5단계 이내 실행 방법
+## 실행 방법
 
 ```bash
 # 1. 의존성 설치
@@ -95,7 +94,7 @@ emissionsKg = convertToFactorDenominator(activity.amount, activity.unit, factor.
             × pickFactorVersion(factor, activity.date).value
 ```
 
-단위 변환 매트릭스는 `lib/units.ts`에 격리되어 있고 13개의 Vitest 테스트로 보호됩니다. 단위가 호환되지 않으면 `UnitMismatchError`로 fail-fast 합니다 (kg·kWh 혼동으로 1000배 어긋나는 실수 방지).
+단위 변환 매트릭스는 `lib/units.ts`에 격리되어 있고 13개의 Vitest 테스트로 보호됩니다. 단위가 호환되지 않으면 `UnitMismatchError`로 fail-fast 합니다.
 
 ## 평가 기준 충족 매핑
 
@@ -129,8 +128,5 @@ yarn lint          # next lint
 
 - [`docs/AI_USAGE.md`](./docs/AI_USAGE.md) — 사용한 AI 도구·프롬프트·반영 결정.
 - [`docs/DESIGN_DECISIONS.md`](./docs/DESIGN_DECISIONS.md) — 설계 근거 4개 + Trade-off 4개.
-- **작업 소요 시간:** 약 8~10시간 (분석 1h · Bootstrap 1h · 도메인/시드 1h · 계산코어+테스트 1h · API 1.5h · 디자인시스템 1h · 대시보드 1.5h · 폼·낙관적업데이트 1h · 임포트/버전관리 1h · 문서·테스트 1h).
+- **작업 소요 시간:** 약 8~10시간 (분석 1h · Bootstrap 1h · 도메인/시드 1h · 테스트 1h · API 1.5h · 디자인시스템 1h · 대시보드 1.5h · 업데이트 1h · 임포트/버전관리 1h · 문서·테스트 1h).
 
-## 라이선스 / 문의
-
-평가용 비공개 과제. 질문: tech@hanaloop.com (해당 시).
