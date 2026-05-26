@@ -80,11 +80,15 @@ export function FilterBar() {
             onChange={(e) => setFilter({ from: e.target.value })}
           >
             <option value="">전체</option>
-            {MONTHS.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
+            {MONTHS.map((m) => {
+              const disabled = !!filter.to && m > filter.to;
+              return (
+                <option key={m} value={m} disabled={disabled}>
+                  {m}
+                  {disabled ? ' (종료 월 이후)' : ''}
+                </option>
+              );
+            })}
           </Select>
         </FilterField>
         <FilterField label="종료 월">
@@ -93,11 +97,15 @@ export function FilterBar() {
             onChange={(e) => setFilter({ to: e.target.value })}
           >
             <option value="">전체</option>
-            {MONTHS.map((m) => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
+            {MONTHS.map((m) => {
+              const disabled = !!filter.from && m < filter.from;
+              return (
+                <option key={m} value={m} disabled={disabled}>
+                  {m}
+                  {disabled ? ' (시작 월 이전)' : ''}
+                </option>
+              );
+            })}
           </Select>
         </FilterField>
         <Button
