@@ -8,6 +8,7 @@ import {
   ListChecks,
   Sliders,
   FileSpreadsheet,
+  FileText,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -24,6 +25,7 @@ const ITEMS: NavItem[] = [
   { href: '/activities', label: '활동 데이터', description: '입력·수정·삭제', icon: ListChecks },
   { href: '/factors', label: '배출계수', description: '버전 이력 관리', icon: Sliders },
   { href: '/imports', label: 'Excel 임포트', description: '원본 그대로 업로드', icon: FileSpreadsheet },
+  { href: '/posts', label: '게시물', description: '월별 메모/리포트', icon: FileText },
 ];
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
