@@ -187,5 +187,5 @@ yarn lint          # next lint
 
 - [`docs/AI_USAGE.md`](./docs/AI_USAGE.md) — 사용한 AI 도구·프롬프트·반영 결정.
 - [`docs/DESIGN_DECISIONS.md`](./docs/DESIGN_DECISIONS.md) — 설계 근거 4개 + Trade-off 4개.
-- **작업 소요 시간:** 약 8~10시간 (분석 1h · Bootstrap 1h · 도메인/시드 1h · 테스트 1h · API 1.5h · 디자인시스템 1h · 대시보드 1.5h · 업데이트 1h · 임포트/버전관리 1h · 문서·테스트 1h).
+- **작업 소요 시간:** 약 8~10시간 (분석 1h · Bootstrap 1h · 도메인/시드 1h · API 1.5h · 디자인시스템 1h · 대시보드 1.5h · 업데이트 1h · 임포트/버전관리 1h · 문서·테스트 1h).
 
