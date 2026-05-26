@@ -1,26 +1,59 @@
 'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
-import { Building2 } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
+import { Building2, Plus } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useCompanies } from '@/features/pcf/queries';
 import { useEmissions } from '@/features/pcf/useEmissions';
 import { formatCO2e } from '@/lib/units';
+import { CompanyForm } from '@/components/forms/CompanyForm';
 
 export default function CompaniesPage() {
   const companies = useCompanies();
   const { byCompany, isLoading } = useEmissions({});
+  const [showForm, setShowForm] = React.useState(false);
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">회사</h1>
-        <p className="text-sm text-muted-foreground">
-          회사별 총 PCF · 국가별 분포. 클릭 시 대시보드 필터 적용.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">회사</h1>
+          <p className="text-sm text-muted-foreground">
+            회사별 총 PCF · 국가별 분포. 클릭 시 대시보드 필터 적용.
+          </p>
+        </div>
+        <Button
+          variant={showForm ? 'outline' : 'primary'}
+          onClick={() => setShowForm((v) => !v)}
+        >
+          <Plus className="mr-1 h-4 w-4" />
+          {showForm ? '닫기' : '회사 추가'}
+        </Button>
       </div>
+
+      {showForm ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>새 회사 추가</CardTitle>
+            <CardDescription>
+              ID는 URL/필터에서 사용됩니다. 국가 코드는 ISO-3166 alpha-2 (예: KR, US, DE).
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CompanyForm onSuccess={() => setShowForm(false)} />
+          </CardContent>
+        </Card>
+      ) : null}
 
       {companies.isLoading || isLoading ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -41,8 +74,7 @@ export default function CompaniesPage() {
                       {c.name}
                     </CardTitle>
                     <CardDescription>
-                      <Badge tone="muted">{c.countryCode}</Badge>{' '}
-                      {c.description ?? ''}
+                      <Badge tone="muted">{c.countryCode}</Badge>
                     </CardDescription>
                   </CardHeader>
                   <CardContent>

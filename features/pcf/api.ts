@@ -5,7 +5,10 @@ import { apiFetch } from '@/lib/api-client';
 import type {
   ActivityCreateInput,
   ActivityFilterInput,
+  ActivityTypeCreateInput,
   ActivityUpdateInput,
+  CompanyCreateInput,
+  EmissionFactorCreateInput,
   FactorVersionCreateInput,
   PostUpsertInput,
 } from '@/lib/validation';
@@ -71,7 +74,15 @@ export type PostDto = {
 };
 
 export const fetchCompanies = () => apiFetch<CompanyDto[]>('/api/companies');
+export const createCompany = (input: CompanyCreateInput) =>
+  apiFetch<CompanyDto>('/api/companies', { method: 'POST', json: input });
+
 export const fetchActivityTypes = () => apiFetch<ActivityTypeDto[]>('/api/activity-types');
+export const createActivityType = (input: ActivityTypeCreateInput) =>
+  apiFetch<ActivityTypeDto>('/api/activity-types', { method: 'POST', json: input });
+
+export const createEmissionFactor = (input: EmissionFactorCreateInput) =>
+  apiFetch<EmissionFactorDto>('/api/emission-factors', { method: 'POST', json: input });
 
 export function buildActivityQuery(filter: ActivityFilterInput): string {
   const params = new URLSearchParams();

@@ -1,7 +1,9 @@
 'use client';
 
-import { Trash2 } from 'lucide-react';
+import * as React from 'react';
+import { Plus, Trash2 } from 'lucide-react';
 import { ActivityForm } from '@/components/forms/ActivityForm';
+import { ActivityTypeForm } from '@/components/forms/ActivityTypeForm';
 import { FilterBar } from '@/components/filters/FilterBar';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
@@ -21,15 +23,45 @@ export default function ActivitiesPage() {
   const del = useDeleteActivity();
   const companyMap = new Map(companies.map((c) => [c.id, c.name]));
   const resultMap = new Map(results.map((r) => [r.activityId, r]));
+  const [showTypeForm, setShowTypeForm] = React.useState(false);
 
   return (
     <div className="flex flex-col gap-4">
-      <div>
-        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">활동 데이터</h1>
-        <p className="text-sm text-muted-foreground">
-          활동량 + 배출계수(자동 매칭) → 실시간 배출량 계산. 저장 실패 시 자동 롤백.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold tracking-tight sm:text-2xl">활동 데이터</h1>
+          <p className="text-sm text-muted-foreground">
+            활동량 + 배출계수(자동 매칭) → 실시간 배출량 계산.
+          </p>
+        </div>
+        <Button
+          variant={showTypeForm ? 'secondary' : 'outline'}
+          onClick={() => setShowTypeForm((v) => !v)}
+        >
+          <Plus className="mr-1 h-4 w-4" />
+          {showTypeForm ? '닫기' : '활동 유형 추가'}
+        </Button>
       </div>
+
+      {showTypeForm ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>새 활동 유형</CardTitle>
+            <CardDescription>
+              GHG Scope를 직접 선택하세요. (Scope는 배출원 통제 주체에 따라 달라지므로 자동 추론
+              하지 않습니다.) 추가한 유형은 아래 활동 입력 폼의 “활동 유형” 드롭다운에 즉시
+              나타납니다. 단, 배출계수는 별도로
+              <a className="ml-1 underline" href="/factors">
+                배출계수 관리
+              </a>
+              에서 등록해야 배출량이 계산됩니다.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ActivityTypeForm onSuccess={() => setShowTypeForm(false)} />
+          </CardContent>
+        </Card>
+      ) : null}
 
       <ActivityForm />
 

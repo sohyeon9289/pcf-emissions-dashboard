@@ -246,7 +246,7 @@ async function main() {
       id: 'cmp_hana',
       name: '하나전자',
       countryCode: 'KR',
-      description: '한글 과제 data.xlsx 기준 시연 회사 (CT-045 라인)',
+      description: ' ',
     },
     update: {},
   });
@@ -256,7 +256,7 @@ async function main() {
       id: 'cmp_acme',
       name: 'Acme Corp',
       countryCode: 'US',
-      description: '영문 과제 샘플 회사',
+      description: ' ',
     },
     update: {},
   });
@@ -266,7 +266,7 @@ async function main() {
       id: 'cmp_globex',
       name: 'Globex',
       countryCode: 'DE',
-      description: '영문 과제 샘플 회사',
+      description: ' ',
     },
     update: {},
   });

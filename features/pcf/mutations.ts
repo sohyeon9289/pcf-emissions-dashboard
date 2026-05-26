@@ -7,19 +7,28 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   createActivity,
+  createActivityType,
+  createCompany,
+  createEmissionFactor,
   createFactorVersion,
   deleteActivity,
   deletePost,
   updateActivity,
   upsertPost,
   type ActivityDto,
+  type ActivityTypeDto,
+  type CompanyDto,
+  type EmissionFactorDto,
   type FactorVersionDto,
   type PostDto,
 } from './api';
 import { qk } from './queries';
 import type {
   ActivityCreateInput,
+  ActivityTypeCreateInput,
   ActivityUpdateInput,
+  CompanyCreateInput,
+  EmissionFactorCreateInput,
   FactorVersionCreateInput,
   PostUpsertInput,
 } from '@/lib/validation';
@@ -123,6 +132,48 @@ export function useDeleteActivity() {
     },
     onSuccess: () => toast.push({ tone: 'success', title: '활동이 삭제되었습니다.' }),
     onSettled: () => invalidateActivities(qc),
+  });
+}
+
+export function useCreateCompany() {
+  const qc = useQueryClient();
+  const toast = useToast();
+  return useMutation<CompanyDto, Error, CompanyCreateInput>({
+    mutationFn: (input) => createCompany(input),
+    onError: (err) =>
+      toast.push({ tone: 'error', title: '회사 추가 실패', description: err.message }),
+    onSuccess: () => {
+      toast.push({ tone: 'success', title: '회사가 추가되었습니다.' });
+      qc.invalidateQueries({ queryKey: qk.companies });
+    },
+  });
+}
+
+export function useCreateActivityType() {
+  const qc = useQueryClient();
+  const toast = useToast();
+  return useMutation<ActivityTypeDto, Error, ActivityTypeCreateInput>({
+    mutationFn: (input) => createActivityType(input),
+    onError: (err) =>
+      toast.push({ tone: 'error', title: '활동 유형 추가 실패', description: err.message }),
+    onSuccess: () => {
+      toast.push({ tone: 'success', title: '활동 유형이 추가되었습니다.' });
+      qc.invalidateQueries({ queryKey: qk.activityTypes });
+    },
+  });
+}
+
+export function useCreateEmissionFactor() {
+  const qc = useQueryClient();
+  const toast = useToast();
+  return useMutation<EmissionFactorDto, Error, EmissionFactorCreateInput>({
+    mutationFn: (input) => createEmissionFactor(input),
+    onError: (err) =>
+      toast.push({ tone: 'error', title: '배출계수 추가 실패', description: err.message }),
+    onSuccess: () => {
+      toast.push({ tone: 'success', title: '배출계수가 추가되었습니다.' });
+      qc.invalidateQueries({ queryKey: qk.emissionFactors });
+    },
   });
 }
 

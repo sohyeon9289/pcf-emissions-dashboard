@@ -35,6 +35,47 @@ export const ActivityFilterSchema = z.object({
 });
 export type ActivityFilterInput = z.infer<typeof ActivityFilterSchema>;
 
+export const CompanyCreateSchema = z.object({
+  id: z
+    .string()
+    .min(1, 'ID를 입력하세요.')
+    .max(40)
+    .regex(/^[a-zA-Z0-9_-]+$/, '영문/숫자/하이픈/언더스코어만 사용할 수 있습니다.'),
+  name: z.string().min(1, '회사명을 입력하세요.').max(80),
+  countryCode: z
+    .string()
+    .length(2, '2자리 국가 코드여야 합니다 (예: KR, US, DE).')
+    .regex(/^[A-Z]{2}$/, '대문자 2글자여야 합니다.'),
+  description: z.string().max(200).optional().nullable(),
+});
+export type CompanyCreateInput = z.infer<typeof CompanyCreateSchema>;
+
+export const ActivityTypeCreateSchema = z.object({
+  key: z
+    .string()
+    .min(1, '키를 입력하세요.')
+    .max(40)
+    .regex(/^[a-z0-9_]+$/, '소문자/숫자/언더스코어만 사용할 수 있습니다.'),
+  label: z.string().min(1, '라벨을 입력하세요.').max(40),
+  scope: GhgScopeSchema,
+  category: z.string().max(60).optional().nullable(),
+  defaultUnit: z.string().min(1, '기본 단위를 입력하세요.').max(20),
+  description: z.string().max(200).optional().nullable(),
+});
+export type ActivityTypeCreateInput = z.infer<typeof ActivityTypeCreateSchema>;
+
+export const EmissionFactorCreateSchema = z.object({
+  typeKey: z.string().min(1, '활동 유형을 선택하세요.'),
+  description: z.string().min(1, '설명을 입력하세요.').max(120),
+  numerator: z.string().min(1).default('kgCO2e'),
+  denominator: z.string().min(1, '단위 분모를 입력하세요.').max(20),
+  source: z.string().max(120).optional().nullable(),
+  initialValue: z.number().positive('초기 값은 양수여야 합니다.'),
+  initialValidFrom: z.string().regex(ymdRegex, '유효 시작일은 YYYY-MM-DD 여야 합니다.'),
+  initialNote: z.string().max(200).optional().nullable(),
+});
+export type EmissionFactorCreateInput = z.infer<typeof EmissionFactorCreateSchema>;
+
 export const FactorVersionCreateSchema = z.object({
   factorId: z.string().min(1),
   value: z.number().positive('배출계수는 양수여야 합니다.'),

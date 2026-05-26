@@ -102,9 +102,16 @@ export function ActivityForm({ onSuccess }: { onSuccess?: () => void }) {
   }, [selectedType, setValue]);
 
   const unitOptions = React.useMemo(() => {
-    if (!selectedFactor) return [];
-    return UNIT_BY_DENOMINATOR[selectedFactor.denominator] ?? [selectedFactor.denominator];
-  }, [selectedFactor]);
+    if (selectedFactor) {
+      return UNIT_BY_DENOMINATOR[selectedFactor.denominator] ?? [selectedFactor.denominator];
+    }
+    if (selectedType) {
+      return (
+        UNIT_BY_DENOMINATOR[selectedType.defaultUnit] ?? [selectedType.defaultUnit]
+      );
+    }
+    return [];
+  }, [selectedFactor, selectedType]);
 
   const preview = React.useMemo(() => {
     if (!selectedType || !selectedFactor) return null;
@@ -213,8 +220,18 @@ export function ActivityForm({ onSuccess }: { onSuccess?: () => void }) {
                   inputMode="decimal"
                   step="any"
                   min={0}
-                  value={Number.isFinite(field.value) ? field.value : 0}
-                  onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                  placeholder="0"
+                  value={field.value === 0 ? '' : field.value}
+                  onFocus={(e) => e.target.select()}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (raw === '') {
+                      field.onChange(0);
+                      return;
+                    }
+                    const n = e.target.valueAsNumber;
+                    field.onChange(Number.isFinite(n) ? n : 0);
+                  }}
                   error={!!errors.amount}
                 />
               )}
@@ -241,6 +258,14 @@ export function ActivityForm({ onSuccess }: { onSuccess?: () => void }) {
             {selectedFactor ? (
               <FieldHint>
                 배출계수 단위 분모: <strong>{selectedFactor.denominator}</strong> (자동 변환)
+              </FieldHint>
+            ) : selectedType ? (
+              <FieldHint>
+                기본 단위: <strong>{selectedType.defaultUnit}</strong> · 이 유형에 등록된 배출계수가
+                없어 배출량은 0으로 계산됩니다.{' '}
+                <a className="underline" href="/factors">
+                  배출계수 관리에서 등록
+                </a>
               </FieldHint>
             ) : null}
           </div>
