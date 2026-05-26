@@ -160,9 +160,6 @@ function PostForm({
     <Card>
       <CardHeader>
         <CardTitle>{post ? '게시물 수정' : '새 게시물'}</CardTitle>
-        <CardDescription>
-          저장 시 일시적 실패가 발생할 수 있습니다. 그대로 다시 저장 버튼을 누르면 재시도됩니다.
-        </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-3 sm:grid-cols-2">
