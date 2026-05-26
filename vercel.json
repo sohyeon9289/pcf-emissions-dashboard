@@ -1,0 +1,4 @@
+{
+  "buildCommand": "yarn vercel-build",
+  "framework": "nextjs"
+}

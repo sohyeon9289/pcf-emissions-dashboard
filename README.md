@@ -26,11 +26,70 @@ yarn start
 
 OpenAPI/Swagger 문서: <http://localhost:3000/docs>
 
+## Vercel + Neon 배포 (평가용 배포 링크)
+
+### 1) Neon — Postgres 생성
+
+1. [https://neon.tech](https://neon.tech) 가입 → **New Project** 생성
+2. Dashboard → **Connect** → 두 가지 connection string 복사:
+   - **Pooled connection** → Vercel `DATABASE_URL`
+   - **Direct connection** → Vercel `DIRECT_URL`
+3. 각 URL 끝에 `?sslmode=require` 가 없으면 추가
+
+### 2) Vercel — 프로젝트 Import
+
+1. [https://vercel.com](https://vercel.com) 로그인 → **Add New → Project**
+2. GitHub `sohyeon9289/pcf-emissions-dashboard` Import
+3. **Environment Variables** 추가:
+
+| 변수 | 값 |
+| --- | --- |
+| `DATABASE_URL` | Neon **Pooled** connection string |
+| `DIRECT_URL` | Neon **Direct** connection string |
+| `NEXT_PUBLIC_SIMULATE_LATENCY` | `1` |
+| `NEXT_PUBLIC_SIMULATE_FAILURE_RATE` | `0.15` |
+| `NEXT_PUBLIC_SIMULATE_LATENCY_MIN_MS` | `200` |
+| `NEXT_PUBLIC_SIMULATE_LATENCY_MAX_MS` | `800` |
+| `NEXT_PUBLIC_APP_NAME` | `PCF Emissions Dashboard` |
+
+4. **Deploy** 클릭 → 빌드 시 `prisma migrate deploy` 가 자동 실행됨
+5. 배포 URL 예: `https://pcf-emissions-dashboard.vercel.app`
+
+### 3) 시드 데이터 주입 (최초 1회)
+
+배포 후 DB는 빈 테이블만 있으므로, 로컬에서 Neon에 시드를 넣습니다:
+
+```powershell
+# Neon Direct connection string 으로 교체
+$env:DATABASE_URL="postgresql://...@ep-xxx.region.aws.neon.tech/neondb?sslmode=require"
+$env:DIRECT_URL=$env:DATABASE_URL
+yarn db:seed
+```
+
+성공 시 `Seed complete` 출력 → 배포 URL 새로고침하면 대시보드 데이터 표시.
+
+### 4) 재배포
+
+GitHub `main` 에 push 하면 Vercel 이 자동 재배포합니다.
+
+---
+
+## Docker로 실행 (로컬/공유)
+
+```bash
+git clone https://github.com/sohyeon9289/pcf-emissions-dashboard.git
+cd pcf-emissions-dashboard
+docker compose --profile full up --build
+```
+
+→ http://localhost:3000
+
 ### 환경 변수 (`.env.example` 참고)
 
 | 변수 | 기본값 | 설명 |
 | --- | --- | --- |
-| `DATABASE_URL` | `postgresql://pcf:pcf@localhost:5432/pcf` | Postgres 접속 정보 |
+| `DATABASE_URL` | `postgresql://pcf:pcf@localhost:5432/pcf` | Postgres 접속 정보 (Neon 배포 시 Pooled URL) |
+| `DIRECT_URL` | (로컬: DATABASE_URL 과 동일) | 마이그레이션용 Direct URL (Neon 배포 시 필수) |
 | `NEXT_PUBLIC_SIMULATE_LATENCY` | `1` | Fake API 지연 시뮬레이션 on/off |
 | `NEXT_PUBLIC_SIMULATE_FAILURE_RATE` | `0.15` | write 요청 무작위 실패 비율 (영문 과제 요구) |
 | `NEXT_PUBLIC_SIMULATE_LATENCY_MIN_MS` / `MAX_MS` | `200` / `800` | 지연 범위 |
