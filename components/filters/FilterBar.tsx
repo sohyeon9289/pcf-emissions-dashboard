@@ -34,7 +34,7 @@ export function FilterBar() {
         <FilterField label="회사">
           <Select
             value={filter.companyId ?? ''}
-            onChange={(e) => setFilter({ companyId: e.target.value || undefined })}
+            onChange={(e) => setFilter({ companyId: e.target.value })}
             disabled={companies.isLoading}
           >
             <option value="">전체</option>
@@ -48,7 +48,7 @@ export function FilterBar() {
         <FilterField label="활동 유형">
           <Select
             value={filter.typeKey ?? ''}
-            onChange={(e) => setFilter({ typeKey: e.target.value || undefined })}
+            onChange={(e) => setFilter({ typeKey: e.target.value })}
             disabled={types.isLoading}
           >
             <option value="">전체</option>
@@ -64,7 +64,7 @@ export function FilterBar() {
             value={filter.scope ?? ''}
             onChange={(e) =>
               setFilter({
-                scope: (e.target.value as 'SCOPE_1' | 'SCOPE_2' | 'SCOPE_3' | '') || undefined,
+                scope: e.target.value as 'SCOPE_1' | 'SCOPE_2' | 'SCOPE_3' | '',
               })
             }
           >
@@ -77,7 +77,7 @@ export function FilterBar() {
         <FilterField label="시작 월">
           <Select
             value={filter.from ?? ''}
-            onChange={(e) => setFilter({ from: e.target.value || undefined })}
+            onChange={(e) => setFilter({ from: e.target.value })}
           >
             <option value="">전체</option>
             {MONTHS.map((m) => (
@@ -90,7 +90,7 @@ export function FilterBar() {
         <FilterField label="종료 월">
           <Select
             value={filter.to ?? ''}
-            onChange={(e) => setFilter({ to: e.target.value || undefined })}
+            onChange={(e) => setFilter({ to: e.target.value })}
           >
             <option value="">전체</option>
             {MONTHS.map((m) => (

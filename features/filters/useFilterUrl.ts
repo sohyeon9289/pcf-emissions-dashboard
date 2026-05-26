@@ -28,11 +28,11 @@ export function useFilterUrl() {
   }, [params]);
 
   const setFilter = useCallback(
-    (patch: Partial<ActivityFilterInput>) => {
+    (patch: Partial<Record<Key, string | undefined>>) => {
       const next = new URLSearchParams(params.toString());
       for (const k of KEYS) {
-        const v = (patch as Record<string, string | undefined>)[k];
-        if (v === undefined) continue;
+        if (!(k in patch)) continue;
+        const v = patch[k];
         if (!v) next.delete(k);
         else next.set(k, v);
       }
