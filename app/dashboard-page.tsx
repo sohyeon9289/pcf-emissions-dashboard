@@ -6,6 +6,8 @@ import { FilterBar } from '@/components/filters/FilterBar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { KpiCard } from '@/components/charts/KpiCard';
 import { CompanyRanking } from '@/components/charts/CompanyRanking';
+import { ScenarioPanel } from '@/components/scenario/ScenarioPanel';
+import { TargetPanel } from '@/components/target/TargetPanel';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState, ErrorState } from '@/components/ui/States';
 import { useFilterUrl } from '@/features/filters/useFilterUrl';
@@ -27,8 +29,22 @@ const TypeBar = dynamic(
 
 export function DashboardPage() {
   const { filter } = useFilterUrl();
-  const { isLoading, error, refetch, monthly, byScope, byType, byCompany, total, mom, results } =
-    useEmissions(filter);
+  const {
+    isLoading,
+    error,
+    refetch,
+    monthly,
+    byScope,
+    byType,
+    byCompany,
+    total,
+    mom,
+    results,
+    activities,
+    typesByKey,
+    factorsByTypeKey,
+    companies,
+  } = useEmissions(filter);
 
   const warnings = results.filter((r) => r.warning).length;
   const scope2 = byScope.find((s) => s.scope === 'SCOPE_2');
@@ -161,6 +177,25 @@ export function DashboardPage() {
             )}
           </CardContent>
         </Card>
+      </section>
+
+      <section className="grid grid-cols-1 gap-3 lg:grid-cols-2">
+        {isLoading ? (
+          <>
+            <Skeleton className="h-[260px] w-full" />
+            <Skeleton className="h-[260px] w-full" />
+          </>
+        ) : (
+          <>
+            <TargetPanel monthly={monthly} />
+            <ScenarioPanel
+              activities={activities}
+              typesByKey={typesByKey}
+              factorsByTypeKey={factorsByTypeKey}
+              companies={companies}
+            />
+          </>
+        )}
       </section>
     </div>
   );
